@@ -48,6 +48,7 @@
  ],
  "fields": [
   {
+   "default": "SHIP-.YYYY.-.#####",
    "fieldname": "naming_series",
    "fieldtype": "Series",
    "label": "Shipment ID",

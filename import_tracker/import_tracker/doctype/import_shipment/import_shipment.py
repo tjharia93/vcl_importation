@@ -3,6 +3,10 @@ from frappe.model.document import Document
 
 
 class ImportShipment(Document):
+	def before_insert(self):
+		if not getattr(self, "naming_series", None):
+			self.naming_series = "SHIP-.YYYY.-.#####"
+
 	def before_save(self):
 		self.update_status()
 
