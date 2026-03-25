@@ -1,0 +1,13 @@
+{
+ "creation": "2026-03-25 00:00:00.000000",
+ "doctype": "Report",
+ "is_standard": "Yes",
+ "modified": "2026-03-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Import Tracker",
+ "name": "Unpaid KRA Duties",
+ "owner": "Administrator",
+ "ref_doctype": "Import Shipment",
+ "report_name": "Unpaid KRA Duties",
+ "report_type": "Script Report"
+}

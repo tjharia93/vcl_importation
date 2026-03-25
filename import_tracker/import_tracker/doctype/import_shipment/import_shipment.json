@@ -1,0 +1,304 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2026-03-25 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "supplier",
+  "purchase_order",
+  "purchase_invoice",
+  "description",
+  "item_type",
+  "status",
+  "assigned_to",
+  "column_break_1",
+  "section_value_quantity",
+  "currency",
+  "proforma_value",
+  "invoice_value",
+  "kra_duty_amount",
+  "kra_duty_paid",
+  "supplier_payment_amount",
+  "supplier_payment_paid",
+  "quantity",
+  "quantity_uom",
+  "gross_weight_kg",
+  "section_logistics",
+  "origin_country",
+  "shipping_mode",
+  "vessel_name",
+  "container_number",
+  "bill_of_lading",
+  "eta_port",
+  "clearing_agent",
+  "section_stage_dates",
+  "date_pi_received",
+  "date_po_issued",
+  "date_invoice_received",
+  "date_kra_docs_received",
+  "date_kra_paid",
+  "date_delivered",
+  "date_clearing_docs",
+  "date_supplier_paid",
+  "section_notes",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Series",
+   "label": "Shipment ID",
+   "options": "SHIP-.YYYY.-.#####",
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "Purchase Order",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "purchase_invoice",
+   "fieldtype": "Link",
+   "label": "Purchase Invoice",
+   "options": "Purchase Invoice"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description of Goods",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_type",
+   "fieldtype": "Select",
+   "label": "Item Type",
+   "options": "Finished Goods\nRaw Materials\nMachinery\nOther"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "PI Received\nPO Issued\nInvoice Received\nKRA Docs Received\nDelivered\nClearing Docs Received\nClosed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Link",
+   "label": "Assigned To",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_value_quantity",
+   "fieldtype": "Section Break",
+   "label": "Value & Quantity"
+  },
+  {
+   "default": "USD",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "proforma_value",
+   "fieldtype": "Currency",
+   "label": "Proforma Value",
+   "options": "currency"
+  },
+  {
+   "fieldname": "invoice_value",
+   "fieldtype": "Currency",
+   "label": "Commercial Invoice Value",
+   "options": "currency"
+  },
+  {
+   "fieldname": "kra_duty_amount",
+   "fieldtype": "Currency",
+   "label": "KRA Duty Amount (KES)",
+   "options": "KES"
+  },
+  {
+   "fieldname": "kra_duty_paid",
+   "fieldtype": "Check",
+   "label": "KRA Duty Paid"
+  },
+  {
+   "fieldname": "supplier_payment_amount",
+   "fieldtype": "Currency",
+   "label": "Supplier Payment Amount",
+   "options": "currency"
+  },
+  {
+   "fieldname": "supplier_payment_paid",
+   "fieldtype": "Check",
+   "label": "Supplier Paid"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "quantity_uom",
+   "fieldtype": "Link",
+   "label": "Unit of Measure",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "gross_weight_kg",
+   "fieldtype": "Float",
+   "label": "Gross Weight (KG)"
+  },
+  {
+   "fieldname": "section_logistics",
+   "fieldtype": "Section Break",
+   "label": "Logistics"
+  },
+  {
+   "fieldname": "origin_country",
+   "fieldtype": "Link",
+   "label": "Country of Origin",
+   "options": "Country"
+  },
+  {
+   "fieldname": "shipping_mode",
+   "fieldtype": "Select",
+   "label": "Shipping Mode",
+   "options": "Sea\nAir\nRoad"
+  },
+  {
+   "fieldname": "vessel_name",
+   "fieldtype": "Data",
+   "label": "Vessel / Flight No."
+  },
+  {
+   "fieldname": "container_number",
+   "fieldtype": "Data",
+   "label": "Container / AWB No."
+  },
+  {
+   "fieldname": "bill_of_lading",
+   "fieldtype": "Data",
+   "label": "Bill of Lading No."
+  },
+  {
+   "fieldname": "eta_port",
+   "fieldtype": "Date",
+   "label": "ETA at Port"
+  },
+  {
+   "fieldname": "clearing_agent",
+   "fieldtype": "Data",
+   "label": "Clearing Agent"
+  },
+  {
+   "fieldname": "section_stage_dates",
+   "fieldtype": "Section Break",
+   "label": "Stage Dates"
+  },
+  {
+   "fieldname": "date_pi_received",
+   "fieldtype": "Date",
+   "label": "Step 1 \u2014 PI Received"
+  },
+  {
+   "fieldname": "date_po_issued",
+   "fieldtype": "Date",
+   "label": "Step 2 \u2014 PO Issued"
+  },
+  {
+   "fieldname": "date_invoice_received",
+   "fieldtype": "Date",
+   "label": "Step 3 \u2014 Commercial Invoice Received"
+  },
+  {
+   "fieldname": "date_kra_docs_received",
+   "fieldtype": "Date",
+   "label": "Step 4 \u2014 KRA Clearing Docs Received"
+  },
+  {
+   "fieldname": "date_kra_paid",
+   "fieldtype": "Date",
+   "label": "Step 4b \u2014 KRA Duties Paid"
+  },
+  {
+   "fieldname": "date_delivered",
+   "fieldtype": "Date",
+   "label": "Step 5 \u2014 Goods Delivered"
+  },
+  {
+   "fieldname": "date_clearing_docs",
+   "fieldtype": "Date",
+   "label": "Step 6 \u2014 Clearing Docs Received"
+  },
+  {
+   "fieldname": "date_supplier_paid",
+   "fieldtype": "Date",
+   "label": "Step 7 \u2014 Supplier Paid"
+  },
+  {
+   "fieldname": "section_notes",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Import Tracker",
+ "name": "Import Shipment",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Purchase User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "description",
+ "track_changes": 1
+}

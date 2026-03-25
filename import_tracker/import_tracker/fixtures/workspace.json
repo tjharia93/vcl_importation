@@ -1,0 +1,77 @@
+[
+ {
+  "doctype": "Workspace",
+  "name": "Import Tracker",
+  "title": "Import Tracker",
+  "label": "Import Tracker",
+  "module": "Import Tracker",
+  "icon": "icon-global",
+  "type": "Module",
+  "is_hidden": 0,
+  "public": 1,
+  "shortcuts": [
+   {
+    "label": "Import Shipment",
+    "link_to": "Import Shipment",
+    "type": "DocType",
+    "color": "Green",
+    "icon": "octicon octicon-package"
+   },
+   {
+    "label": "New Import Shipment",
+    "link_to": "Import Shipment",
+    "type": "DocType",
+    "color": "Blue",
+    "icon": "octicon octicon-plus",
+    "doc_view": "new"
+   },
+   {
+    "label": "Open Shipments by Stage",
+    "link_to": "Open Shipments by Stage",
+    "type": "Report",
+    "color": "Orange",
+    "icon": "octicon octicon-graph"
+   },
+   {
+    "label": "Unpaid KRA Duties",
+    "link_to": "Unpaid KRA Duties",
+    "type": "Report",
+    "color": "Red",
+    "icon": "octicon octicon-alert"
+   },
+   {
+    "label": "Delivered Awaiting Supplier Payment",
+    "link_to": "Delivered Awaiting Supplier Payment",
+    "type": "Report",
+    "color": "Yellow",
+    "icon": "octicon octicon-clock"
+   },
+   {
+    "label": "Shipment Lead Times",
+    "link_to": "Shipment Lead Times",
+    "type": "Report",
+    "color": "Purple",
+    "icon": "octicon octicon-dashboard"
+   }
+  ],
+  "links": [
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Import Shipment",
+    "link_count": 0,
+    "link_to": "Import Shipment",
+    "link_type": "DocType",
+    "onboard": 1,
+    "type": "Link"
+   }
+  ],
+  "charts": [
+   {
+    "chart_name": "Open Shipments by Status",
+    "label": "Open Shipments by Status"
+   }
+  ],
+  "number_cards": []
+ }
+]
