@@ -1,0 +1,20 @@
+[project]
+name = "import_tracker"
+authors = [
+    { name = "Your Company", email = "admin@yourcompany.com" }
+]
+description = "Import Shipment Tracker — from Proforma Invoice to supplier payment"
+requires-python = ">=3.10"
+readme = "README.md"
+license = { text = "MIT" }
+dynamic = ["version"]
+dependencies = [
+    "frappe"
+]
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.module]
+name = "import_tracker"
