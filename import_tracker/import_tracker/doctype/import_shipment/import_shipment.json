@@ -76,7 +76,7 @@
   },
   {
    "fieldname": "description",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "Description of Goods",
    "reqd": 1
   },
