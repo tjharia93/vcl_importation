@@ -9,7 +9,9 @@
   "naming_series",
   "supplier",
   "purchase_order",
+  "order_confirmation_no",
   "purchase_invoice",
+  "bill_no",
   "description",
   "item_type",
   "status",
@@ -69,10 +71,24 @@
    "options": "Purchase Order"
   },
   {
+   "fetch_from": "purchase_order.order_confirmation_no",
+   "fieldname": "order_confirmation_no",
+   "fieldtype": "Data",
+   "label": "Order Confirmation No.",
+   "read_only": 1
+  },
+  {
    "fieldname": "purchase_invoice",
    "fieldtype": "Link",
    "label": "Purchase Invoice",
    "options": "Purchase Invoice"
+  },
+  {
+   "fetch_from": "purchase_invoice.bill_no",
+   "fieldname": "bill_no",
+   "fieldtype": "Data",
+   "label": "Bill No.",
+   "read_only": 1
   },
   {
    "fieldname": "description",
