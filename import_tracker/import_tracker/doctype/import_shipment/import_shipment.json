@@ -195,7 +195,7 @@
   {
    "fieldname": "shipping_mode",
    "fieldtype": "Select",
-   "label": "Shipping Mode",
+   "label": "Shipping Modes",
    "options": "Sea\nAir\nRoad"
   },
   {
