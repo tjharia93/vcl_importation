@@ -270,7 +270,9 @@ frappe.pages['import-dashboard'].on_page_load = function(wrapper) {
       display: flex; justify-content: space-between;
       font-size: 11px; color: var(--muted);
     }
-  </style>
+  </style>`
+let raw_html = `
+
 </head>
 <body>
 
@@ -285,8 +287,7 @@ frappe.pages['import-dashboard'].on_page_load = function(wrapper) {
   </div>
   <div class="header-right">
     <span class="badge live">Live</span>
-    <span class="badge">FY 2025–26</span>
-    <span style="font-size:11px;color:var(--muted)">Last refreshed: just now</span>
+    <span class="badge" id="fy-badge">FY Data</span>
   </div>
 </div>
 
@@ -295,535 +296,263 @@ frappe.pages['import-dashboard'].on_page_load = function(wrapper) {
   <!-- KPI CARDS -->
   <div class="section-label">At a Glance</div>
   <div class="kpi-grid">
-
     <div class="kpi-card blue">
       <div class="kpi-icon">📦</div>
-      <div class="kpi-value">14</div>
+      <div class="kpi-value" id="kpi-open-shipments">-</div>
       <div class="kpi-label">Open Shipments</div>
-      <div class="kpi-delta up">↑ 3 from last month</div>
     </div>
-
     <div class="kpi-card amber">
       <div class="kpi-icon">🏛️</div>
-      <div class="kpi-value">4</div>
+      <div class="kpi-value" id="kpi-unpaid-kra">-</div>
       <div class="kpi-label">Unpaid KRA Duties</div>
-      <div class="kpi-delta down">KES 2.4M outstanding</div>
+      <div class="kpi-delta down" id="kpi-unpaid-kra-amt">-</div>
     </div>
-
     <div class="kpi-card green">
       <div class="kpi-icon">💳</div>
-      <div class="kpi-value">6</div>
+      <div class="kpi-value" id="kpi-supplier-payment">-</div>
       <div class="kpi-label">Awaiting Supplier Payment</div>
-      <div class="kpi-delta up">USD 182k due</div>
+      <div class="kpi-delta up" id="kpi-supplier-payment-amt">-</div>
     </div>
-
     <div class="kpi-card red">
       <div class="kpi-icon">⚠️</div>
-      <div class="kpi-value">3</div>
-      <div class="kpi-label">Overdue (&gt;14 days)</div>
-      <div class="kpi-delta down">No progress flagged</div>
+      <div class="kpi-value" id="kpi-overdue">-</div>
+      <div class="kpi-label">Overdue (>14 days)</div>
     </div>
-
     <div class="kpi-card purple">
       <div class="kpi-icon">✅</div>
-      <div class="kpi-value">27</div>
+      <div class="kpi-value" id="kpi-closed-year">-</div>
       <div class="kpi-label">Closed This Year</div>
-      <div class="kpi-delta up">↑ 12% vs last year</div>
     </div>
-
   </div>
 
-  <!-- ROW 2: Pipeline + Mode donut -->
   <div class="section-label" style="margin-top:28px">Pipeline & Breakdown</div>
   <div class="chart-grid-2">
-
-    <!-- Pipeline by stage -->
     <div class="chart-card">
       <div class="chart-header">
-        <div>
-          <div class="chart-title">Shipments by Stage</div>
-          <div class="chart-subtitle">Live pipeline — open shipments only</div>
-        </div>
-        <span class="chart-tag">14 open</span>
+        <div><div class="chart-title">Shipments by Stage</div><div class="chart-subtitle">Live pipeline</div></div>
+        <span class="chart-tag" id="pipeline-tag">- open</span>
       </div>
-      <div class="pipeline">
-        <div class="pipeline-row">
-          <div class="pipeline-label">PI Received</div>
-          <div class="pipeline-bar-bg">
-            <div class="pipeline-bar-fill" style="width:21%;background:linear-gradient(90deg,#a78bfa,#7c6ee0)">2</div>
-          </div>
-          <div class="pipeline-count" style="color:#a78bfa">2</div>
-        </div>
-        <div class="pipeline-row">
-          <div class="pipeline-label">PO Issued</div>
-          <div class="pipeline-bar-bg">
-            <div class="pipeline-bar-fill" style="width:29%;background:linear-gradient(90deg,#4f8ef7,#2d6fe0)">3</div>
-          </div>
-          <div class="pipeline-count" style="color:#4f8ef7">3</div>
-        </div>
-        <div class="pipeline-row">
-          <div class="pipeline-label">Invoice Received</div>
-          <div class="pipeline-bar-bg">
-            <div class="pipeline-bar-fill" style="width:36%;background:linear-gradient(90deg,#f5a623,#e09210)">4</div>
-          </div>
-          <div class="pipeline-count" style="color:#f5a623">4</div>
-        </div>
-        <div class="pipeline-row">
-          <div class="pipeline-label">KRA Docs Received</div>
-          <div class="pipeline-bar-bg">
-            <div class="pipeline-bar-fill" style="width:21%;background:linear-gradient(90deg,#f0a500,#d98f00)">2</div>
-          </div>
-          <div class="pipeline-count" style="color:#f0a500">2</div>
-        </div>
-        <div class="pipeline-row">
-          <div class="pipeline-label">Delivered</div>
-          <div class="pipeline-bar-bg">
-            <div class="pipeline-bar-fill" style="width:29%;background:linear-gradient(90deg,#36c98e,#24a872)">3</div>
-          </div>
-          <div class="pipeline-count" style="color:#36c98e">3</div>
-        </div>
-        <div class="pipeline-row">
-          <div class="pipeline-label">Clearing Docs Recv'd</div>
-          <div class="pipeline-bar-bg">
-            <div class="pipeline-bar-fill" style="width:0%;background:linear-gradient(90deg,#28b07a,#1d9060)"></div>
-          </div>
-          <div class="pipeline-count" style="color:#28b07a">0</div>
-        </div>
-      </div>
+      <div class="pipeline" id="pipeline-container"></div>
     </div>
-
-    <!-- Shipping mode donut -->
     <div class="chart-card">
-      <div class="chart-header">
-        <div>
-          <div class="chart-title">Shipping Mode</div>
-          <div class="chart-subtitle">All shipments YTD</div>
-        </div>
-      </div>
-      <div class="chart-wrap" style="height:180px">
-        <canvas id="modeChart"></canvas>
-      </div>
-      <div style="display:flex;gap:16px;justify-content:center;margin-top:14px;flex-wrap:wrap">
-        <span style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px">
-          <span style="width:10px;height:10px;border-radius:50%;background:#4f8ef7;display:inline-block"></span> Sea
-        </span>
-        <span style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px">
-          <span style="width:10px;height:10px;border-radius:50%;background:#36c98e;display:inline-block"></span> Air
-        </span>
-        <span style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px">
-          <span style="width:10px;height:10px;border-radius:50%;background:#f5a623;display:inline-block"></span> Road
-        </span>
-      </div>
+      <div class="chart-header"><div><div class="chart-title">Shipping Mode</div><div class="chart-subtitle">Active shipments by mode</div></div></div>
+      <div class="chart-wrap" style="height:180px"><canvas id="modeChart"></canvas></div>
+      <div id="mode-legend" style="display:flex;gap:16px;justify-content:center;margin-top:14px;flex-wrap:wrap"></div>
     </div>
-
   </div>
 
-  <!-- ROW 3: Monthly trend + Supplier value + Origins -->
   <div class="section-label">Trends & Values</div>
   <div class="chart-grid-3">
-
-    <!-- Monthly trend -->
     <div class="chart-card" style="grid-column: span 2">
-      <div class="chart-header">
-        <div>
-          <div class="chart-title">Monthly Shipment Activity</div>
-          <div class="chart-subtitle">New shipments opened vs closed — FY 2025–26</div>
-        </div>
-        <span class="chart-tag">12 months</span>
-      </div>
-      <div class="chart-wrap" style="height:200px">
-        <canvas id="trendChart"></canvas>
-      </div>
+      <div class="chart-header"><div><div class="chart-title">Monthly Shipment Activity</div><div class="chart-subtitle">New vs Closed (12 Months)</div></div></div>
+      <div class="chart-wrap" style="height:200px"><canvas id="trendChart"></canvas></div>
     </div>
-
-    <!-- Country of origin -->
     <div class="chart-card">
-      <div class="chart-header">
-        <div>
-          <div class="chart-title">Origin Countries</div>
-          <div class="chart-subtitle">Shipment count by source</div>
-        </div>
-      </div>
-      <div class="origin-grid">
-        <div class="origin-item">
-          <div class="origin-flag">🇸🇪</div>
-          <div>
-            <div style="font-size:11px;font-weight:600">Sweden</div>
-            <div class="origin-name">Paper / Pulp</div>
-          </div>
-          <div class="origin-val" style="color:var(--accent1)">8</div>
-        </div>
-        <div class="origin-item">
-          <div class="origin-flag">🇩🇪</div>
-          <div>
-            <div style="font-size:11px;font-weight:600">Germany</div>
-            <div class="origin-name">Machinery</div>
-          </div>
-          <div class="origin-val" style="color:var(--accent2)">5</div>
-        </div>
-        <div class="origin-item">
-          <div class="origin-flag">🇨🇳</div>
-          <div>
-            <div style="font-size:11px;font-weight:600">China</div>
-            <div class="origin-name">Raw Mats</div>
-          </div>
-          <div class="origin-val" style="color:var(--accent3)">7</div>
-        </div>
-        <div class="origin-item">
-          <div class="origin-flag">🇮🇳</div>
-          <div>
-            <div style="font-size:11px;font-weight:600">India</div>
-            <div class="origin-name">Fin. Goods</div>
-          </div>
-          <div class="origin-val" style="color:var(--accent5)">4</div>
-        </div>
-        <div class="origin-item">
-          <div class="origin-flag">🇺🇸</div>
-          <div>
-            <div style="font-size:11px;font-weight:600">USA</div>
-            <div class="origin-name">Machinery</div>
-          </div>
-          <div class="origin-val" style="color:var(--accent1)">3</div>
-        </div>
-        <div class="origin-item">
-          <div class="origin-flag">🇿🇦</div>
-          <div>
-            <div style="font-size:11px;font-weight:600">S. Africa</div>
-            <div class="origin-name">Other</div>
-          </div>
-          <div class="origin-val" style="color:var(--muted)">2</div>
-        </div>
-      </div>
+      <div class="chart-header"><div><div class="chart-title">Origin Countries</div><div class="chart-subtitle">Active shipment counts</div></div></div>
+      <div class="origin-grid" id="origins-grid"></div>
     </div>
-
   </div>
 
-  <!-- ROW 4: Supplier value + overdue alerts -->
   <div class="section-label">Suppliers & Alerts</div>
   <div class="chart-grid-2">
-
-    <!-- Supplier value bars -->
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top Suppliers by Invoice</div><div class="chart-subtitle">Commercial invoice value</div></div></div>
+      <div class="value-bars" id="suppliers-list"></div>
+    </div>
     <div class="chart-card">
       <div class="chart-header">
-        <div>
-          <div class="chart-title">Top Suppliers by Invoice Value</div>
-          <div class="chart-subtitle">Commercial invoice value — USD</div>
-        </div>
+        <div><div class="chart-title">Overdue Alerts</div><div class="chart-subtitle">No progress in >14 days</div></div>
+        <span class="chart-tag" id="alerts-tag" style="background:rgba(224,92,92,0.1);color:var(--accent4);border-color:rgba(224,92,92,0.3)">0 flagged</span>
       </div>
-      <div class="value-bars">
-        <div class="vbar-row">
-          <div class="vbar-name">Elof Hansson Trade</div>
-          <div class="vbar-bg"><div class="vbar-fill" style="width:100%"></div></div>
-          <div class="vbar-amt">$412,000</div>
-        </div>
-        <div class="vbar-row">
-          <div class="vbar-name">Nordic Paper AB</div>
-          <div class="vbar-bg"><div class="vbar-fill" style="width:74%"></div></div>
-          <div class="vbar-amt">$305,000</div>
-        </div>
-        <div class="vbar-row">
-          <div class="vbar-name">Voith GmbH</div>
-          <div class="vbar-bg"><div class="vbar-fill" style="width:58%"></div></div>
-          <div class="vbar-amt">$238,000</div>
-        </div>
-        <div class="vbar-row">
-          <div class="vbar-name">Shenzhen Intl Trade</div>
-          <div class="vbar-bg"><div class="vbar-fill" style="width:42%"></div></div>
-          <div class="vbar-amt">$174,000</div>
-        </div>
-        <div class="vbar-row">
-          <div class="vbar-name">Tata International</div>
-          <div class="vbar-bg"><div class="vbar-fill" style="width:31%"></div></div>
-          <div class="vbar-amt">$128,000</div>
-        </div>
-        <div class="vbar-row">
-          <div class="vbar-name">Metso Outotec</div>
-          <div class="vbar-bg"><div class="vbar-fill" style="width:22%"></div></div>
-          <div class="vbar-amt">$91,000</div>
-        </div>
-      </div>
+      <div class="alert-list" id="alerts-list"></div>
     </div>
-
-    <!-- Overdue alerts -->
-    <div class="chart-card">
-      <div class="chart-header">
-        <div>
-          <div class="chart-title">Overdue Alerts</div>
-          <div class="chart-subtitle">No stage progress in &gt;14 days</div>
-        </div>
-        <span class="chart-tag" style="background:rgba(224,92,92,0.1);color:var(--accent4);border-color:rgba(224,92,92,0.3)">3 flagged</span>
-      </div>
-      <div class="alert-list">
-        <div class="alert-item">
-          <div class="alert-dot"></div>
-          <div>
-            <div class="alert-name">SHIP-2025-00041</div>
-            <div class="alert-status">Elof Hansson • Uncoated Wood Free</div>
-          </div>
-          <div class="alert-days">22 days</div>
-        </div>
-        <div class="alert-item">
-          <div class="alert-dot"></div>
-          <div>
-            <div class="alert-name">SHIP-2025-00037</div>
-            <div class="alert-status">Nordic Paper • Kraft Liner 90gsm</div>
-          </div>
-          <div class="alert-days">18 days</div>
-        </div>
-        <div class="alert-item">
-          <div class="alert-dot"></div>
-          <div>
-            <div class="alert-name">SHIP-2025-00033</div>
-            <div class="alert-status">Voith GmbH • Press Section Parts</div>
-          </div>
-          <div class="alert-days">15 days</div>
-        </div>
-      </div>
-
-      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:10px;font-weight:600">AVERAGE LEAD TIME BY STAGE</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div style="padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid var(--border)">
-            <div style="font-size:18px;font-weight:800;color:var(--accent1)">6.2</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">avg days PI→PO</div>
-          </div>
-          <div style="padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid var(--border)">
-            <div style="font-size:18px;font-weight:800;color:var(--accent3)">18.4</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">avg days PO→Invoice</div>
-          </div>
-          <div style="padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid var(--border)">
-            <div style="font-size:18px;font-weight:800;color:var(--accent2)">34.1</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">avg days Invoice→Del.</div>
-          </div>
-          <div style="padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid var(--border)">
-            <div style="font-size:18px;font-weight:800;color:var(--accent5)">67.8</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">avg total days</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- ROW 5: Recent shipments table -->
   <div class="section-label">Recent Shipments</div>
   <div class="chart-card">
     <div class="chart-header">
-      <div>
-        <div class="chart-title">Active Shipment Register</div>
-        <div class="chart-subtitle">All open shipments — sorted by last activity</div>
-      </div>
-      <span class="chart-tag">14 open</span>
+      <div><div class="chart-title">Active Shipment Register</div><div class="chart-subtitle">All open shipments — sorted by recent updates</div></div>
+      <span class="chart-tag" id="recent-tag">- open</span>
     </div>
     <table class="recent-table">
-      <thead>
-        <tr>
-          <th>Shipment ID</th>
-          <th>Supplier</th>
-          <th>Description</th>
-          <th>Mode</th>
-          <th>Status</th>
-          <th>ETA Port</th>
-          <th>Progress</th>
-          <th>Assigned</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="ship-id">SHIP-2025-00044</span></td>
-          <td style="font-size:12px">Elof Hansson</td>
-          <td style="font-size:11px;color:var(--muted)">Uncoated WF 68gsm</td>
-          <td><span class="mode-tag">🚢 Sea</span></td>
-          <td><span class="status-pill s-po">PO Issued</span></td>
-          <td style="font-size:11px;color:var(--muted)">15 Apr 2026</td>
-          <td>
-            <div class="dots">
-              <div class="dot done"></div><div class="dot done"></div>
-              <div class="dot active"></div><div class="dot"></div>
-              <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-            </div>
-          </td>
-          <td style="font-size:11px;color:var(--muted)">tanuj.haria</td>
-        </tr>
-        <tr>
-          <td><span class="ship-id">SHIP-2025-00043</span></td>
-          <td style="font-size:12px">Nordic Paper AB</td>
-          <td style="font-size:11px;color:var(--muted)">Kraft Liner 90gsm</td>
-          <td><span class="mode-tag">🚢 Sea</span></td>
-          <td><span class="status-pill s-inv">Invoice Received</span></td>
-          <td style="font-size:11px;color:var(--muted)">22 Apr 2026</td>
-          <td>
-            <div class="dots">
-              <div class="dot done"></div><div class="dot done"></div>
-              <div class="dot done"></div><div class="dot active"></div>
-              <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-            </div>
-          </td>
-          <td style="font-size:11px;color:var(--muted)">tanuj.haria</td>
-        </tr>
-        <tr>
-          <td><span class="ship-id">SHIP-2025-00041</span></td>
-          <td style="font-size:12px">Voith GmbH</td>
-          <td style="font-size:11px;color:var(--muted)">Press Section Parts</td>
-          <td><span class="mode-tag">✈️ Air</span></td>
-          <td><span class="status-pill s-kra">KRA Docs Recv'd</span></td>
-          <td style="font-size:11px;color:var(--accent4)">Overdue</td>
-          <td>
-            <div class="dots">
-              <div class="dot done"></div><div class="dot done"></div>
-              <div class="dot done"></div><div class="dot done"></div>
-              <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
-            </div>
-          </td>
-          <td style="font-size:11px;color:var(--muted)">tanuj.haria</td>
-        </tr>
-        <tr>
-          <td><span class="ship-id">SHIP-2025-00040</span></td>
-          <td style="font-size:12px">Shenzhen Intl</td>
-          <td style="font-size:11px;color:var(--muted)">BOPP Film Rolls</td>
-          <td><span class="mode-tag">🚢 Sea</span></td>
-          <td><span class="status-pill s-del">Delivered</span></td>
-          <td style="font-size:11px;color:var(--muted)">—</td>
-          <td>
-            <div class="dots">
-              <div class="dot done"></div><div class="dot done"></div>
-              <div class="dot done"></div><div class="dot done"></div>
-              <div class="dot done"></div><div class="dot active"></div><div class="dot"></div>
-            </div>
-          </td>
-          <td style="font-size:11px;color:var(--muted)">tanuj.haria</td>
-        </tr>
-        <tr>
-          <td><span class="ship-id">SHIP-2025-00039</span></td>
-          <td style="font-size:12px">Tata International</td>
-          <td style="font-size:11px;color:var(--muted)">Duplex Board 400gsm</td>
-          <td><span class="mode-tag">🚛 Road</span></td>
-          <td><span class="status-pill s-pi">PI Received</span></td>
-          <td style="font-size:11px;color:var(--muted)">TBD</td>
-          <td>
-            <div class="dots">
-              <div class="dot done"></div><div class="dot active"></div>
-              <div class="dot"></div><div class="dot"></div>
-              <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-            </div>
-          </td>
-          <td style="font-size:11px;color:var(--muted)">tanuj.haria</td>
-        </tr>
-      </tbody>
+      <thead><tr><th>Shipment ID</th><th>Supplier</th><th>Description</th><th>Mode</th><th>Status</th><th>ETA Port</th><th>Assigned</th></tr></thead>
+      <tbody id="recent-table-body"></tbody>
     </table>
   </div>
-
 </div>
 
-<!-- FOOTER -->
 <div class="footer">
-  <span>Import Tracker v0.0.2 · ERPNext v16 · Frappe Cloud</span>
-  <span>Prototype — mock data only</span>
+  <span>Import Tracker v0.0.2 · Dynamic Data</span>
 </div>`;
-	$(page.body).append(raw_html);
-	
-	// Load Chart.js and execute the prototype logic exactly as written
-	frappe.require('https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js', () => {
-		// ── Shipping Mode Donut ──
-  new Chart(document.getElementById('modeChart'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Sea', 'Air', 'Road'],
-      datasets: [{
-        data: [22, 8, 11],
-        backgroundColor: ['#4f8ef7', '#36c98e', '#f5a623'],
-        borderColor: '#21263a',
-        borderWidth: 3,
-        hoverOffset: 6,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      cutout: '68%',
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#1a1d27',
-          borderColor: '#2e3452',
-          borderWidth: 1,
-          titleColor: '#e2e8f0',
-          bodyColor: '#7a859e',
-          callbacks: {
-            label: ctx => ` ${ctx.parsed} shipments`
-          }
-        }
-      }
-    }
-  });
 
-  // ── Monthly Trend ──
-  const months = ['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
-  new Chart(document.getElementById('trendChart'), {
-    type: 'line',
-    data: {
-      labels: months,
-      datasets: [
-        {
-          label: 'Opened',
-          data: [3,5,4,6,4,5,7,3,4,6,5,4],
-          borderColor: '#4f8ef7',
-          backgroundColor: 'rgba(79,142,247,0.08)',
-          borderWidth: 2,
-          pointBackgroundColor: '#4f8ef7',
-          pointRadius: 4,
-          pointHoverRadius: 6,
-          tension: 0.4,
-          fill: true,
-        },
-        {
-          label: 'Closed',
-          data: [2,3,4,4,5,4,5,4,3,5,4,3],
-          borderColor: '#36c98e',
-          backgroundColor: 'rgba(54,201,142,0.06)',
-          borderWidth: 2,
-          pointBackgroundColor: '#36c98e',
-          pointRadius: 4,
-          pointHoverRadius: 6,
-          tension: 0.4,
-          fill: true,
+    $(page.body).append(raw_html);
+
+    frappe.call({
+        method: "import_tracker.import_tracker.page.import_dashboard.import_dashboard.get_dashboard_data",
+        callback: function(r) {
+            if(r.message) {
+                render_dashboard(r.message, page);
+            }
         }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: {
-          position: 'top',
-          align: 'end',
-          labels: {
-            color: '#7a859e', font: { size: 11 },
-            boxWidth: 10, boxHeight: 10,
-            usePointStyle: true, pointStyleWidth: 10,
-          }
-        },
-        tooltip: {
-          backgroundColor: '#1a1d27',
-          borderColor: '#2e3452',
-          borderWidth: 1,
-          titleColor: '#e2e8f0',
-          bodyColor: '#7a859e',
-        }
-      },
-      scales: {
-        x: {
-          grid: { color: 'rgba(255,255,255,0.04)' },
-          ticks: { color: '#7a859e', font: { size: 11 } },
-          border: { color: 'rgba(255,255,255,0.06)' }
-        },
-        y: {
-          grid: { color: 'rgba(255,255,255,0.04)' },
-          ticks: { color: '#7a859e', font: { size: 11 }, stepSize: 2 },
-          border: { color: 'rgba(255,255,255,0.06)' },
-          min: 0,
-        }
-      }
+    });
+};
+
+const formatCurrency = (amt, curr="USD") => {
+    if(!amt) return curr + " 0";
+    if(amt >= 1000000) return curr + " " + (amt/1000000).toFixed(1) + "M";
+    if(amt >= 1000) return curr + " " + (amt/1000).toFixed(0) + "k";
+    return curr + " " + formatNumberStr(amt);
+}
+
+const formatNumberStr = n => String(n).replace(/(.)(?=(\d{3})+$)/g,'$1,');
+
+const formatMode = mode => mode=='Air'?'✈️ Air':mode=='Sea'?'🚢 Sea':mode=='Road'?'🚛 Road':mode;
+const modeClass = mode => mode=='Air'?'air':mode=='Sea'?'sea':'road';
+
+function render_dashboard(data, page) {
+    // KPIs
+    $('#kpi-open-shipments').text(data.kpis.open_shipments);
+    $('#kpi-unpaid-kra').text(data.kpis.unpaid_kra_duties);
+    $('#kpi-unpaid-kra-amt').text("KES " + formatNumberStr((data.kpis.kra_outstanding_amount || 0).toFixed(2)) + ' outstanding');
+    $('#kpi-supplier-payment').text(data.kpis.awaiting_supplier_payment);
+    $('#kpi-supplier-payment-amt').text("USD " + formatNumberStr((data.kpis.supplier_outstanding_amount || 0).toFixed(2)) + ' outstanding');
+    $('#kpi-overdue').text(data.kpis.overdue);
+    $('#kpi-closed-year').text(data.kpis.closed_this_year);
+    
+    $('#pipeline-tag, #recent-tag').text(data.kpis.open_shipments + ' open');
+    $('#alerts-tag').text(data.kpis.overdue + ' flagged');
+
+    // Pipeline
+    const stages = [
+      { name: "PI Received", color: ["#a78bfa", "#7c6ee0"], text: "#a78bfa" },
+      { name: "PO Issued", color: ["#4f8ef7", "#2d6fe0"], text: "#4f8ef7" },
+      { name: "Invoice Received", color: ["#f5a623", "#e09210"], text: "#f5a623" },
+      { name: "KRA Docs Received", color: ["#f0a500", "#d98f00"], text: "#f0a500" },
+      { name: "Delivered", color: ["#36c98e", "#24a872"], text: "#36c98e" },
+      { name: "Clearing Docs Received", color: ["#28b07a", "#1d9060"], text: "#28b07a" }
+    ];
+    let pipeHtml = '';
+    let maxPipeCount = Math.max(...Object.values(data.pipeline), 1);
+    stages.forEach(s => {
+        let count = data.pipeline[s.name] || 0;
+        let pct = (count / maxPipeCount) * 100;
+        pipeHtml += `
+        <div class="pipeline-row">
+          <div class="pipeline-label">${s.name}</div>
+          <div class="pipeline-bar-bg">
+            <div class="pipeline-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${s.color[0]},${s.color[1]})">${count||''}</div>
+          </div>
+          <div class="pipeline-count" style="color:${s.text}">${count}</div>
+        </div>`;
+    });
+    $('#pipeline-container').html(pipeHtml);
+
+    // Origins
+    let orgHtml = '';
+    const flags = {"Sweden":"🇸🇪", "Germany":"🇩🇪", "China":"🇨🇳", "India":"🇮🇳", "USA":"🇺🇸", "South Africa":"🇿🇦"};
+    for(let country in data.origins) {
+        let c = data.origins[country];
+        orgHtml += `
+        <div class="origin-item">
+          <div class="origin-flag">${flags[country] || '🏳️'}</div>
+          <div><div style="font-size:11px;font-weight:600">${country}</div></div>
+          <div class="origin-val" style="color:var(--accent1)">${c}</div>
+        </div>`;
     }
-  });
-	});
+    $('#origins-grid').html(orgHtml);
+
+    // Suppliers
+    let supHtml = '';
+    let maxSupVal = data.top_suppliers.length ? data.top_suppliers[0].value : 1;
+    data.top_suppliers.forEach(s => {
+        let pct = (s.value / maxSupVal) * 100;
+        supHtml += `
+        <div class="vbar-row">
+          <div class="vbar-name" title="${s.supplier}">${s.supplier}</div>
+          <div class="vbar-bg"><div class="vbar-fill" style="width:${pct}%"></div></div>
+          <div class="vbar-amt">${formatCurrency(s.value, 'USD')}</div>
+        </div>`;
+    });
+    if(!supHtml) supHtml = '<div style="font-size:11px;color:var(--muted)">No data available.</div>';
+    $('#suppliers-list').html(supHtml);
+
+    // Alerts
+    let altHtml = '';
+    data.overdue_alerts.forEach(a => {
+        altHtml += `
+        <div class="alert-item">
+          <div class="alert-dot"></div>
+          <div>
+            <div class="alert-name"><a href="/app/import-shipment/${a.name}" style="color:inherit;text-decoration:none">${a.name}</a></div>
+            <div class="alert-status">${a.supplier}</div>
+          </div>
+          <div class="alert-days">${a.days_overdue} days</div>
+        </div>`;
+    });
+    if(!altHtml) altHtml = '<div style="font-size:11px;color:var(--muted)">No overdue shipments.</div>';
+    $('#alerts-list').html(altHtml);
+    
+    // Recent
+    const statusMap = {
+        'PI Received': 's-pi', 'PO Issued': 's-po', 'Invoice Received': 's-inv',
+        'KRA Docs Received': 's-kra', 'Delivered': 's-del', 'Clearing Docs Received': 's-clr',
+        'Closed': 's-closed'
+    };
+    let recHtml = '';
+    data.recent_shipments.forEach(r => {
+        let sp = statusMap[r.status] || 's-closed';
+        recHtml += `
+        <tr>
+          <td><a href="/app/import-shipment/${r.name}" class="ship-id" style="text-decoration:none">${r.name}</a></td>
+          <td style="font-size:12px">${r.supplier}</td>
+          <td style="font-size:11px;color:var(--muted)">${r.description?r.description.substring(0,30):''}</td>
+          <td><span class="mode-tag">${formatMode(r.shipping_mode)}</span></td>
+          <td><span class="status-pill ${sp}">${r.status}</span></td>
+          <td style="font-size:11px;color:var(--muted)">${r.eta_port?r.eta_port:'—'}</td>
+          <td style="font-size:11px;color:var(--muted)">${r.assigned_to?r.assigned_to.split('@')[0]:'—'}</td>
+        </tr>`;
+    });
+    if(!recHtml) recHtml = '<tr><td colspan="7" style="text-align:center;color:var(--muted)">No active shipments</td></tr>';
+    $('#recent-table-body').html(recHtml);
+
+    // Load Default Chart
+    frappe.require('https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js', () => {
+        
+        let modeLabels = Object.keys(data.shipping_mode);
+        let modeData = Object.values(data.shipping_mode);
+        let modeColors = modeLabels.map(l => l=='Sea'?'#4f8ef7':l=='Air'?'#36c98e':'#f5a623');
+        
+        new Chart(document.getElementById('modeChart'), {
+            type: 'doughnut',
+            data: { labels: modeLabels, datasets: [{ data: modeData, backgroundColor: modeColors, borderColor: '#21263a', borderWidth: 3, hoverOffset: 6 }] },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '68%', plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a1d27', borderColor: '#2e3452', borderWidth: 1, titleColor: '#e2e8f0', bodyColor: '#7a859e', callbacks: { label: ctx => ` ${ctx.parsed} shipments` } } } }
+        });
+
+        // Legend for mode
+        let legHtml = "";
+        modeLabels.forEach((l, i) => { legHtml+=`<span style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:${modeColors[i]};display:inline-block"></span> ${l}</span>`; });
+        $('#mode-legend').html(legHtml);
+
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+              labels: data.monthly_trend.labels.reverse(),
+              datasets: [
+                { label: 'Opened', data: data.monthly_trend.opened.reverse(), borderColor: '#4f8ef7', backgroundColor: 'rgba(79,142,247,0.08)', borderWidth: 2, pointBackgroundColor: '#4f8ef7', pointRadius: 4, pointHoverRadius: 6, tension: 0.4, fill: true },
+                { label: 'Closed', data: data.monthly_trend.closed.reverse(), borderColor: '#36c98e', backgroundColor: 'rgba(54,201,142,0.06)', borderWidth: 2, pointBackgroundColor: '#36c98e', pointRadius: 4, pointHoverRadius: 6, tension: 0.4, fill: true }
+              ]
+            },
+            options: {
+              responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: { position: 'top', align: 'end', labels: { color: '#7a859e', font: { size: 11 }, boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyleWidth: 10 } },
+                tooltip: { backgroundColor: '#1a1d27', borderColor: '#2e3452', borderWidth: 1, titleColor: '#e2e8f0', bodyColor: '#7a859e' }
+              },
+              scales: {
+                x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a859e', font: { size: 11 } }, border: { color: 'rgba(255,255,255,0.06)' } },
+                y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a859e', font: { size: 11 }, stepSize: 2 }, border: { color: 'rgba(255,255,255,0.06)' }, min: 0 }
+              }
+            }
+        });
+    });
 }
