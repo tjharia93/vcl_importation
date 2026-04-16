@@ -14,7 +14,8 @@ def get_dashboard_data():
             "name", "supplier", "description", "status",
             "kra_duty_amount", "kra_duty_paid",
             "invoice_value", "shipping_mode", "origin_country",
-            "eta_port", "assigned_to", "shipping_line",
+            "eta_port", "live_eta", "tracking_status",
+            "assigned_to", "shipping_line",
             "purchase_order", "purchase_invoice",
             "bill_of_lading", "num_containers",
             "date_delivered", "date_po_issued",
@@ -127,9 +128,14 @@ def get_dashboard_data():
                 supplier_value_map.get(s.supplier, 0) + s.invoice_value
             )
 
-        # Format eta_port for JSON
-        if s.eta_port and hasattr(s.eta_port, "strftime"):
-            s.eta_port = s.eta_port.strftime("%d %b %Y")
+        # Use live ETA when available, fall back to PI manual ETA
+        best_eta = s.live_eta or s.eta_port
+        if best_eta and hasattr(best_eta, "strftime"):
+            s.display_eta = best_eta.strftime("%d %b %Y")
+            s.eta_is_live = bool(s.live_eta)
+        else:
+            s.display_eta = None
+            s.eta_is_live = False
 
         data["recent_shipments"].append(s)
 

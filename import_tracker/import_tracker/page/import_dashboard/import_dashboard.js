@@ -128,7 +128,7 @@ function render_dashboard(data) {
 			<td class="muted-sm">${esc((r.description || "").substring(0, 35))}</td>
 			<td class="muted-sm">${fmtMode(r.shipping_mode)}</td>
 			<td><span class="st-pill ${cls}">${esc(r.status)}</span></td>
-			<td class="muted-sm">${r.eta_port ? esc(r.eta_port) : "—"}</td>
+			<td class="muted-sm">${r.display_eta ? esc(r.display_eta) + (r.eta_is_live ? ' <span style="color:var(--a2);font-size:9px;font-weight:700">LIVE</span>' : '') : "—"}</td>
 			<td class="muted-sm">${r.assigned_to ? esc(r.assigned_to.split("@")[0]) : "—"}</td>
 		</tr>`;
 	});

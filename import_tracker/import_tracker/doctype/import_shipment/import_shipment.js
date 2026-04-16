@@ -1,6 +1,7 @@
 frappe.ui.form.on("Import Shipment", {
 	refresh(frm) {
 		render_progress_bar(frm);
+		render_eta_indicator(frm);
 
 		// --- Quick-link buttons ---
 		if (frm.doc.purchase_order) {
@@ -99,4 +100,40 @@ function render_progress_bar(frm) {
 	</div>`;
 
 	frm.dashboard.set_headline_alert(html);
+}
+
+// ---------------------------------------------------------------------------
+// ETA indicator — shows live vs manual ETA with visual badge
+// ---------------------------------------------------------------------------
+function render_eta_indicator(frm) {
+	if (frm.is_new()) return;
+
+	let eta = frm.doc.live_eta || frm.doc.eta_port;
+	if (!eta) return;
+
+	let is_live = !!frm.doc.live_eta;
+	let badge_color = is_live ? "#36c98e" : "#f5a623";
+	let badge_text = is_live ? "Live" : "Manual";
+	let updated = frm.doc.last_tracking_update
+		? ` &middot; Updated ${frappe.datetime.prettyDate(frm.doc.last_tracking_update)}`
+		: "";
+	let status_text = frm.doc.tracking_status || "";
+
+	let indicator = `<div style="
+		padding:8px 16px;margin-top:4px;
+		background:rgba(${is_live ? "54,201,142" : "245,166,35"},0.08);
+		border:1px solid rgba(${is_live ? "54,201,142" : "245,166,35"},0.25);
+		border-radius:8px;display:flex;align-items:center;gap:10px;font-size:12px">
+		<span style="
+			background:${badge_color};color:#fff;font-size:10px;
+			font-weight:700;padding:2px 8px;border-radius:10px">${badge_text}</span>
+		<span><b>ETA:</b> ${frappe.datetime.str_to_user(eta)}</span>
+		<span style="color:#7a859e;font-size:10px">${status_text}${updated}</span>
+	</div>`;
+
+	// Place after the headline alert
+	$(frm.dashboard.wrapper).find(".eta-indicator").remove();
+	$(frm.dashboard.wrapper).append(
+		'<div class="eta-indicator">' + indicator + "</div>"
+	);
 }

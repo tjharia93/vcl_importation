@@ -44,6 +44,12 @@ scheduler_events = {
         "import_tracker.import_tracker.doctype."
         "import_shipment.import_shipment.bulk_refresh_statuses",
     ],
+    "cron": {
+        # Every 2 days at 6 AM — fetch live ETA from shipping line APIs
+        "0 6 */2 * *": [
+            "import_tracker.import_tracker.shipping_tracker.update_shipment_tracking",
+        ],
+    },
 }
 
 # ---------------------------------------------------------------------------

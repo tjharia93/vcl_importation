@@ -33,7 +33,10 @@
   "shipping_line",
   "column_break_shipping",
   "eta_port",
+  "live_eta",
   "num_containers",
+  "tracking_status",
+  "last_tracking_update",
   "section_milestones",
   "kra_duty_paid",
   "date_kra_paid",
@@ -221,14 +224,34 @@
    "fetch_from": "purchase_invoice.custom_expected_date_of_delivery_to_port",
    "fieldname": "eta_port",
    "fieldtype": "Date",
-   "label": "ETA at Port",
+   "label": "ETA at Port (from PI)",
    "read_only": 1
+  },
+  {
+   "fieldname": "live_eta",
+   "fieldtype": "Date",
+   "label": "ETA at Port (Live)",
+   "read_only": 1,
+   "description": "Auto-updated from shipping line API when available"
   },
   {
    "fetch_from": "purchase_invoice.custom_number_of_containers",
    "fieldname": "num_containers",
    "fieldtype": "Int",
    "label": "Number of Containers",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tracking_status",
+   "fieldtype": "Data",
+   "label": "Tracking Status",
+   "read_only": 1,
+   "description": "Live / Manual / Unsupported carrier"
+  },
+  {
+   "fieldname": "last_tracking_update",
+   "fieldtype": "Datetime",
+   "label": "Last Tracking Update",
    "read_only": 1
   },
   {
