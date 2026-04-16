@@ -7,44 +7,45 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "supplier",
+  "section_linked_docs",
   "purchase_order",
-  "order_confirmation_no",
   "purchase_invoice",
-  "bill_no",
-  "description",
-  "item_type",
+  "column_break_links",
+  "supplier",
   "status",
   "assigned_to",
-  "column_break_1",
-  "section_value_quantity",
-  "currency",
-  "proforma_value",
-  "invoice_value",
-  "kra_duty_amount",
-  "kra_duty_paid",
-  "supplier_payment_amount",
-  "supplier_payment_paid",
-  "quantity",
-  "quantity_uom",
-  "gross_weight_kg",
-  "section_logistics",
+  "section_overview",
+  "description",
+  "order_confirmation_no",
+  "po_date",
+  "column_break_overview",
   "origin_country",
   "shipping_mode",
-  "vessel_name",
-  "container_number",
-  "bill_of_lading",
-  "eta_port",
   "clearing_agent",
-  "section_stage_dates",
-  "date_pi_received",
+  "section_financials",
+  "currency",
+  "proforma_value",
+  "column_break_financials",
+  "invoice_value",
+  "kra_duty_amount",
+  "section_shipping",
+  "bill_of_lading",
+  "shipping_line",
+  "column_break_shipping",
+  "eta_port",
+  "num_containers",
+  "section_milestones",
+  "kra_duty_paid",
+  "date_kra_paid",
+  "column_break_milestones",
+  "date_delivered",
+  "section_timeline",
   "date_po_issued",
   "date_invoice_received",
   "date_kra_docs_received",
-  "date_kra_paid",
-  "date_delivered",
-  "date_clearing_docs",
-  "date_supplier_paid",
+  "column_break_timeline",
+  "date_clearing_complete",
+  "date_closed",
   "section_notes",
   "notes"
  ],
@@ -58,17 +59,64 @@
    "set_only_once": 1
   },
   {
-   "fieldname": "supplier",
-   "fieldtype": "Link",
-   "label": "Supplier",
-   "options": "Supplier",
-   "reqd": 1
+   "fieldname": "section_linked_docs",
+   "fieldtype": "Section Break",
+   "label": "Linked Documents"
   },
   {
    "fieldname": "purchase_order",
    "fieldtype": "Link",
    "label": "Purchase Order",
-   "options": "Purchase Order"
+   "options": "Purchase Order",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "purchase_invoice",
+   "fieldtype": "Link",
+   "label": "Purchase Invoice",
+   "options": "Purchase Invoice"
+  },
+  {
+   "fieldname": "column_break_links",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "purchase_order.supplier",
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "default": "PO Issued",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "PO Issued\nInvoice Received\nKRA Docs Received\nKRA Duties Paid\nDelivered\nClearing Complete\nClosed",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Link",
+   "label": "Assigned To",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_overview",
+   "fieldtype": "Section Break",
+   "label": "Overview"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description of Goods",
+   "in_list_view": 1
   },
   {
    "fetch_from": "purchase_order.order_confirmation_no",
@@ -78,113 +126,15 @@
    "read_only": 1
   },
   {
-   "fieldname": "purchase_invoice",
-   "fieldtype": "Link",
-   "label": "Purchase Invoice",
-   "options": "Purchase Invoice"
-  },
-  {
-   "fetch_from": "purchase_invoice.bill_no",
-   "fieldname": "bill_no",
-   "fieldtype": "Data",
-   "label": "Bill No.",
+   "fetch_from": "purchase_order.transaction_date",
+   "fieldname": "po_date",
+   "fieldtype": "Date",
+   "label": "PO Date",
    "read_only": 1
   },
   {
-   "fieldname": "description",
-   "fieldtype": "Small Text",
-   "label": "Description of Goods",
-   "reqd": 1
-  },
-  {
-   "fieldname": "item_type",
-   "fieldtype": "Select",
-   "label": "Item Type",
-   "options": "Finished Goods\nRaw Materials\nMachinery\nOther"
-  },
-  {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "PI Received\nPO Issued\nInvoice Received\nKRA Docs Received\nDelivered\nClearing Docs Received\nClosed",
-   "read_only": 1
-  },
-  {
-   "fieldname": "assigned_to",
-   "fieldtype": "Link",
-   "label": "Assigned To",
-   "options": "User"
-  },
-  {
-   "fieldname": "column_break_1",
+   "fieldname": "column_break_overview",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "section_value_quantity",
-   "fieldtype": "Section Break",
-   "label": "Value & Quantity"
-  },
-  {
-   "default": "USD",
-   "fieldname": "currency",
-   "fieldtype": "Link",
-   "label": "Currency",
-   "options": "Currency"
-  },
-  {
-   "fieldname": "proforma_value",
-   "fieldtype": "Currency",
-   "label": "Proforma Value",
-   "options": "currency"
-  },
-  {
-   "fieldname": "invoice_value",
-   "fieldtype": "Currency",
-   "label": "Commercial Invoice Value",
-   "options": "currency"
-  },
-  {
-   "fieldname": "kra_duty_amount",
-   "fieldtype": "Currency",
-   "label": "KRA Duty Amount (KES)",
-   "options": "KES"
-  },
-  {
-   "fieldname": "kra_duty_paid",
-   "fieldtype": "Check",
-   "label": "KRA Duty Paid"
-  },
-  {
-   "fieldname": "supplier_payment_amount",
-   "fieldtype": "Currency",
-   "label": "Supplier Payment Amount",
-   "options": "currency"
-  },
-  {
-   "fieldname": "supplier_payment_paid",
-   "fieldtype": "Check",
-   "label": "Supplier Paid"
-  },
-  {
-   "fieldname": "quantity",
-   "fieldtype": "Float",
-   "label": "Quantity"
-  },
-  {
-   "fieldname": "quantity_uom",
-   "fieldtype": "Link",
-   "label": "Unit of Measure",
-   "options": "UOM"
-  },
-  {
-   "fieldname": "gross_weight_kg",
-   "fieldtype": "Float",
-   "label": "Gross Weight (KG)"
-  },
-  {
-   "fieldname": "section_logistics",
-   "fieldtype": "Section Break",
-   "label": "Logistics"
   },
   {
    "fieldname": "origin_country",
@@ -195,28 +145,8 @@
   {
    "fieldname": "shipping_mode",
    "fieldtype": "Select",
-   "label": "Shipping Modes",
-   "options": "Sea\nAir\nRoad"
-  },
-  {
-   "fieldname": "vessel_name",
-   "fieldtype": "Data",
-   "label": "Vessel / Flight No."
-  },
-  {
-   "fieldname": "container_number",
-   "fieldtype": "Data",
-   "label": "Container / AWB No."
-  },
-  {
-   "fieldname": "bill_of_lading",
-   "fieldtype": "Data",
-   "label": "Bill of Lading No."
-  },
-  {
-   "fieldname": "eta_port",
-   "fieldtype": "Date",
-   "label": "ETA at Port"
+   "label": "Shipping Mode",
+   "options": "\nSea\nAir\nRoad"
   },
   {
    "fieldname": "clearing_agent",
@@ -224,54 +154,153 @@
    "label": "Clearing Agent"
   },
   {
-   "fieldname": "section_stage_dates",
+   "fieldname": "section_financials",
    "fieldtype": "Section Break",
-   "label": "Stage Dates"
+   "label": "Financials"
   },
   {
-   "fieldname": "date_pi_received",
-   "fieldtype": "Date",
-   "label": "Step 1 \u2014 PI Received"
+   "fetch_from": "purchase_order.currency",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "read_only": 1
   },
   {
-   "fieldname": "date_po_issued",
-   "fieldtype": "Date",
-   "label": "Step 2 \u2014 PO Issued"
+   "fetch_from": "purchase_order.grand_total",
+   "fieldname": "proforma_value",
+   "fieldtype": "Currency",
+   "label": "Proforma Value",
+   "options": "currency",
+   "read_only": 1
   },
   {
-   "fieldname": "date_invoice_received",
-   "fieldtype": "Date",
-   "label": "Step 3 \u2014 Commercial Invoice Received"
+   "fieldname": "column_break_financials",
+   "fieldtype": "Column Break"
   },
   {
-   "fieldname": "date_kra_docs_received",
+   "fetch_from": "purchase_invoice.grand_total",
+   "fieldname": "invoice_value",
+   "fieldtype": "Currency",
+   "label": "Invoice Value",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "purchase_invoice.base_total_taxes_and_charges",
+   "fieldname": "kra_duty_amount",
+   "fieldtype": "Currency",
+   "label": "KRA Duties & Taxes (KES)",
+   "options": "KES",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_shipping",
+   "fieldtype": "Section Break",
+   "label": "Shipping Details"
+  },
+  {
+   "fetch_from": "purchase_invoice.custom_bill_of_lading_number",
+   "fieldname": "bill_of_lading",
+   "fieldtype": "Data",
+   "label": "Bill of Lading No.",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "purchase_invoice.custom_shipping_line",
+   "fieldname": "shipping_line",
+   "fieldtype": "Data",
+   "label": "Shipping Line",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_shipping",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "purchase_invoice.custom_expected_date_of_delivery_to_port",
+   "fieldname": "eta_port",
    "fieldtype": "Date",
-   "label": "Step 4 \u2014 KRA Clearing Docs Received"
+   "label": "ETA at Port",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "purchase_invoice.custom_number_of_containers",
+   "fieldname": "num_containers",
+   "fieldtype": "Int",
+   "label": "Number of Containers",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_milestones",
+   "fieldtype": "Section Break",
+   "label": "Import Milestones"
+  },
+  {
+   "fieldname": "kra_duty_paid",
+   "fieldtype": "Check",
+   "label": "KRA Duty Paid"
   },
   {
    "fieldname": "date_kra_paid",
    "fieldtype": "Date",
-   "label": "Step 4b \u2014 KRA Duties Paid"
+   "label": "Date KRA Paid",
+   "depends_on": "kra_duty_paid"
+  },
+  {
+   "fieldname": "column_break_milestones",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "date_delivered",
    "fieldtype": "Date",
-   "label": "Step 5 \u2014 Goods Delivered"
+   "label": "Date Delivered"
   },
   {
-   "fieldname": "date_clearing_docs",
-   "fieldtype": "Date",
-   "label": "Step 6 \u2014 Clearing Docs Received"
+   "fieldname": "section_timeline",
+   "fieldtype": "Section Break",
+   "label": "Stage Timeline",
+   "collapsible": 1
   },
   {
-   "fieldname": "date_supplier_paid",
+   "fieldname": "date_po_issued",
    "fieldtype": "Date",
-   "label": "Step 7 \u2014 Supplier Paid"
+   "label": "PO Issued",
+   "read_only": 1
+  },
+  {
+   "fieldname": "date_invoice_received",
+   "fieldtype": "Date",
+   "label": "Invoice Received",
+   "read_only": 1
+  },
+  {
+   "fieldname": "date_kra_docs_received",
+   "fieldtype": "Date",
+   "label": "KRA Docs Received",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_timeline",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_clearing_complete",
+   "fieldtype": "Date",
+   "label": "Clearing Complete",
+   "read_only": 1
+  },
+  {
+   "fieldname": "date_closed",
+   "fieldtype": "Date",
+   "label": "Closed",
+   "read_only": 1
   },
   {
    "fieldname": "section_notes",
    "fieldtype": "Section Break",
-   "label": "Notes"
+   "label": "Notes",
+   "collapsible": 1
   },
   {
    "fieldname": "notes",
@@ -281,7 +310,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-25 00:00:00.000000",
+ "modified": "2026-04-16 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Import Tracker",
  "name": "Import Shipment",
